@@ -1,4 +1,4 @@
-plaintext = "hello world"
+plaintext = "a"
 
 def hashing(plaintext, length=32):
     seed = 0
@@ -14,6 +14,7 @@ def hashing(plaintext, length=32):
         seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
         hash.append(text[(seed**salt*random_length_num) % len(text)])
         salt += 1
+        random_length_num += 1
     return hash
 
 print("".join(hashing(plaintext)))
