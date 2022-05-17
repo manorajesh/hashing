@@ -6,7 +6,7 @@ mhash \- hash PLAINTEXT with a given LENGTH
 .SH SYNOPSIS
 mhash [--length 32] [PLAINTEXT]
 .SH DESCRIPTION
-mhash hashing the plaintext witht the default length of 32 characters. The hashing algorithm is custom made and not tested for collisions. 
+mhash hashing the plaintext with the default length of 32 characters. The hashing algorithm is custom made and not tested for collisions. 
 .SH OPTIONS
 mhash takes a hash character length option (default: 32). You have to supply a plaintext to hash.
 .SH SEE ALSO
