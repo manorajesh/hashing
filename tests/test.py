@@ -1,4 +1,5 @@
 import jellyfish as jf
+import time
 
 def hashing(plaintext, length=32):
     seed = 0
@@ -24,23 +25,35 @@ def lowercase_word(seed):
         seed = seed // 26
     return word
 
-
-
-file = open("hash.txt", "r+")
-file1 = open("hash.txt", "r+")
+file = open("hash.txt", "w+")
+file1 = open("hash.txt", "w+")
 file2 = open("hash_collisions.txt", "w+")
 
 number = 0
-while number < 10:
+while number < 10000:
     number += 1
-    file.write("".join(hashing(lowercase_word(number))) + '\n')
+    file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
 
-file.seek(0)
-counter = 0
-for line in file:
-    for word in file1:
-        if jf.jaro_distance(line, word) > 0.95 and line != word:
-            file2.write(line + " -> " + word + '\n')
-    counter += 2
-    file.seek(counter)
-    file1.seek(0)
+print(f"Hashes created {time.asctime()}")
+
+try:
+    file.seek(0)
+    counter = 0
+    for line in file:
+        for word in file1:
+            if jf.jaro_distance(line, word) > 0.87 and line != word:
+                file2.write(line + " -> " + word + '\n')
+        file1.seek(0)
+        if counter % 500 == 0:
+            print(counter, time.asctime())
+        counter += 1
+except KeyboardInterrupt:
+    print("Keyboard interrupt")
+    file.close()
+    file1.close()
+    file2.close()
+    exit()
+
+file.close()
+file1.close()
+file2.close()
