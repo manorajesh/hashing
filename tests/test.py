@@ -30,7 +30,7 @@ file1 = open("hash.txt", "w+")
 file2 = open("hash_collisions.txt", "w+")
 
 number = 0
-while number < 10000:
+while number < 100000:
     number += 1
     file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
 
