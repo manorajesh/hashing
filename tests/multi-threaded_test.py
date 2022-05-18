@@ -8,17 +8,18 @@ def hashing(plaintext, length=32):
     hash = []
     salt = 0
     random_length_num = 1
-    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!"
+    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
 
     for char in plaintext:
         random_length_num += ord(char)
+        random_length_num = ~ random_length_num + (random_length_num << 15) & 0xFFFFFFFF
 
     while salt <= length:
         seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
         hash.append(text[(seed**salt*random_length_num) % len(text)])
         salt += 1
         random_length_num += 1
-    return base64.b64encode("".join(hash).encode()).decode()
+    return hash
 
 def lowercase_word(seed):
     word = ""
@@ -33,8 +34,8 @@ file2 = open("tests/hash_collisions.txt", "w+")
 
 ## Generate hashes
 
-number = 10000
-hash_num = 20000
+number = 0
+hash_num = 1000
 while number < hash_num:
     number += 1
     file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
