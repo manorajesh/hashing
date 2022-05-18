@@ -1,4 +1,3 @@
-from ctypes.wintypes import WORD
 import jellyfish as jf
 
 def hashing(plaintext, length=32):
