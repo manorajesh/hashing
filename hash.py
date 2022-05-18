@@ -20,5 +20,4 @@ def hashing(plaintext, length=32):
     return hash
 
 plaintext = "mrkb"
-
 print(jf.jaro_distance("".join(hashing(plaintext)), "".join(hashing("msjb"))))

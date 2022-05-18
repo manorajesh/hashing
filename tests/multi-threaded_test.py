@@ -21,6 +21,12 @@ def hashing(plaintext, length=32):
         random_length_num += 1
     return hash
 
+def hashing_test(plaintext, length=32):
+    word = ""
+    for i in range(length):
+        word += "a"
+    return word
+
 def lowercase_word(seed):
     word = ""
     while seed > 0:
@@ -35,7 +41,7 @@ file2 = open("tests/hash_collisions.txt", "w+")
 ## Generate hashes
 
 number = 0
-hash_num = 1000
+hash_num = 10000
 while number < hash_num:
     number += 1
     file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
@@ -48,7 +54,7 @@ def thread_function(hashes, file2):
         counter = 0
         for line in hashes:
             for word in hashes:
-                if jf.jaro_distance(line, word) > 0.87 and line != word:
+                if jf.jaro_distance(line, word) > 0.9 and line != word:
                     file2.write(line + word + '\n')
 
             if counter % 500 == 0:
