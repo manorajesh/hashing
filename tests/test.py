@@ -1,5 +1,5 @@
-import random
-import string
+from ctypes.wintypes import WORD
+import jellyfish as jf
 
 def hashing(plaintext, length=32):
     seed = 0
@@ -18,14 +18,30 @@ def hashing(plaintext, length=32):
         random_length_num += 1
     return hash
 
-def lowercase_word():
-    word = ''
-    random_word_length = random.randint(1, 5)
-    while len(word) != random_word_length:
-        word += random.choice(string.ascii_lowercase)
+def lowercase_word(seed):
+    word = ""
+    while seed > 0:
+        word += chr(seed % 26 + 97)
+        seed = seed // 26
     return word
- 
-file1 = open("rainbowtabble.txt", "a")
-while True:
-    c = lowercase_word()
-    file1.write("%s\t\t\t>\t\t%s\n" %(c, "".join(hashing(c))))
+
+
+
+file = open("hash.txt", "r+")
+file1 = open("hash.txt", "r+")
+file2 = open("hash_collisions.txt", "w+")
+
+number = 0
+while number < 10:
+    number += 1
+    file.write("".join(hashing(lowercase_word(number))) + '\n')
+
+file.seek(0)
+counter = 0
+for line in file:
+    for word in file1:
+        if jf.jaro_distance(line, word) > 0.95 and line != word:
+            file2.write(line + " -> " + word + '\n')
+    counter += 2
+    file.seek(counter)
+    file1.seek(0)
