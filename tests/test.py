@@ -1,5 +1,7 @@
+from email.mime import base
 import jellyfish as jf
 import time
+import base64
 
 def hashing(plaintext, length=32):
     seed = 0
@@ -16,7 +18,7 @@ def hashing(plaintext, length=32):
         hash.append(text[(seed**salt*random_length_num) % len(text)])
         salt += 1
         random_length_num += 1
-    return hash
+    return base64.b64encode("".join(hash).encode()).decode()
 
 def lowercase_word(seed):
     word = ""
@@ -30,7 +32,7 @@ file1 = open("hash.txt", "w+")
 file2 = open("hash_collisions.txt", "w+")
 
 number = 0
-while number < 100000:
+while number < 10000:
     number += 1
     file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
 
@@ -42,7 +44,7 @@ try:
     for line in file:
         for word in file1:
             if jf.jaro_distance(line, word) > 0.87 and line != word:
-                file2.write(line + " -> " + word + '\n')
+                file2.write(line + word + '\n')
         file1.seek(0)
         if counter % 500 == 0:
             print(counter, time.asctime())
