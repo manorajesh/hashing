@@ -16,8 +16,10 @@ def hashing(plaintext, length=32):
     text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
 
     for char in plaintext:
-        random_length_num += ord(char)
-        random_length_num = ~ random_length_num + (random_length_num << 15) & 0xFFFFFFFF
+        random_length_num += ord(char) + random_length_num
+        random_length_num = ~ random_length_num + (random_length_num << 15)
+        random_length_num += random_length_num >> random_length_num
+        random_length_num += ~ len(plaintext)
 
     while salt <= length:
         seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
