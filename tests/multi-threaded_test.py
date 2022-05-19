@@ -35,19 +35,20 @@ def hashing_test(plaintext, length=32):
 
 def lowercase_word(seed):
     word = ""
+    seed *= 1000000
     while seed > 0:
         word += chr(seed % 26 + 97)
         seed = seed // 26
     return word
 
-file = open("tests/hash.txt", "w+")
-file1 = open("tests/hash.txt", "w+")
-file2 = open("tests/hash_collisions.txt", "w+")
+file = open("hash.txt", "w+")
+file1 = open("hash.txt", "w+")
+file2 = open("hash_collisions.txt", "w+")
 
 ## Generate hashes
 
 number = 0
-hash_num = 50000
+hash_num = 100000
 while number < hash_num:
     number += 1
     file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
@@ -89,17 +90,23 @@ thread8 = Thread(target=thread_function, args=(text_buffer[hash_num // 10 * 7:ha
 thread9 = Thread(target=thread_function, args=(text_buffer[hash_num // 10 * 8:hash_num // 10 * 9], file2))
 thread10 = Thread(target=thread_function, args=(text_buffer[hash_num // 10 * 9:hash_num], file2))
 
-
-thread1.start()
-thread2.start()
-thread3.start()
-thread4.start()
-thread5.start()
-thread6.start()
-thread7.start()
-thread8.start()
-thread9.start()
-thread10.start()
+try:
+	thread1.start()
+	thread2.start()
+	thread3.start()
+	thread4.start()
+	thread5.start()
+	thread6.start()
+	thread7.start()
+	thread8.start()
+	thread9.start()
+	thread10.start()
+except KeyboardInterrupt:
+	print("Keyboard interrupt")
+	file.close()
+	file1.close()
+	file2.close()
+	exit()
 
 thread1.join()
 thread2.join()
@@ -112,7 +119,7 @@ thread8.join()
 thread9.join()
 thread10.join()
 
+print("Done at " + time.asctime())
 file.close()
 file1.close()
 file2.close()
-print("Done at " + time.asctime())
