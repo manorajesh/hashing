@@ -1,4 +1,3 @@
-import math
 import jellyfish as jf
 
 def hashing(plaintext, length=32):
@@ -9,8 +8,10 @@ def hashing(plaintext, length=32):
     text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
 
     for char in plaintext:
-        random_length_num += ord(char)
-        random_length_num = ~ random_length_num + (random_length_num << 15) & 0xFFFFFFFF
+        random_length_num += ord(char) + random_length_num
+        random_length_num = ~ random_length_num + (random_length_num << 15)
+        random_length_num += random_length_num >> random_length_num
+        random_length_num += ~ len(plaintext)
 
     while salt <= length:
         seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
@@ -19,5 +20,6 @@ def hashing(plaintext, length=32):
         random_length_num += 1
     return hash
 
-plaintext = "mrkb"
-print(jf.jaro_distance("".join(hashing(plaintext)), "".join(hashing("msjb"))))
+print("".join(hashing("i")))
+print("".join(hashing("ii")))
+print(jf.jaro_distance("".join(hashing("i")), "".join(hashing("ii"))))

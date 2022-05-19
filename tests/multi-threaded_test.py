@@ -2,6 +2,7 @@ import jellyfish as jf
 import time
 import base64
 from threading import Thread
+import hashlib
 
 def hashing(plaintext, length=32):
     seed = 0
@@ -11,8 +12,10 @@ def hashing(plaintext, length=32):
     text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
 
     for char in plaintext:
-        random_length_num += ord(char)
-        random_length_num = ~ random_length_num + (random_length_num << 15) & 0xFFFFFFFF
+        random_length_num += ord(char) + random_length_num
+        random_length_num = ~ random_length_num + (random_length_num << 15)
+        random_length_num += random_length_num >> random_length_num
+        random_length_num += ~ len(plaintext)
 
     while salt <= length:
         seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
@@ -20,6 +23,9 @@ def hashing(plaintext, length=32):
         salt += 1
         random_length_num += 1
     return hash
+
+def sha(plaintext):
+    return hashlib.sha256(plaintext.encode()).hexdigest()
 
 def hashing_test(plaintext, length=32):
     word = ""
@@ -41,7 +47,7 @@ file2 = open("tests/hash_collisions.txt", "w+")
 ## Generate hashes
 
 number = 0
-hash_num = 10000
+hash_num = 50000
 while number < hash_num:
     number += 1
     file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
