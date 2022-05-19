@@ -4,11 +4,17 @@ import base64
 
 @click.command()
 @click.option('--length', '-l', default=32, help='Length of cipertext', show_default=True)
-@click.argument('plaintext')
-@click.version_option(version='0.0.1')
+@click.option('-p', '--plaintext', help='Plaintext to be hashed')
+@click.option('--file', '-f', help='Hash the input file', type=click.File('r'), default=None)
+@click.version_option(version='0.0.2')
 @click.help_option('--help', '-h')
 
-def hashing(plaintext, length=32):
+def hashing(file, plaintext="", length=32):
+    """Hash the PLAINTEXT with a given LENGTH"""
+    if file != None:
+        file.seek(0)
+        plaintext = file.read()
+
     seed = 0
     hash = []
     salt = 0
@@ -26,7 +32,7 @@ def hashing(plaintext, length=32):
         hash.append(text[(seed**salt*random_length_num) % len(text)])
         salt += 1
         random_length_num += 1
-    return hash
+    click.echo("".join(hash))
 
 if __name__ == '__main__':
     hashing()
