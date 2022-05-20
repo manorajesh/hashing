@@ -5,6 +5,7 @@ from multiprocessing import Process
 import multiprocessing as mp
 import hashlib
 
+## hashing function
 def hashing(plaintext, length=32):
     seed = 0
     hash = []
@@ -25,15 +26,18 @@ def hashing(plaintext, length=32):
         random_length_num += 1
     return hash
 
+## checking if sha has collisions
 def sha(plaintext):
     return hashlib.sha256(plaintext.encode()).hexdigest()
 
+## test if collisions are found properly
 def hashing_test(plaintext, length=32):
     word = ""
     for i in range(length):
         word += "a"
     return word
 
+## function to generate lowercase words
 def lowercase_word(seed):
     word = ""
     seed *= 1
@@ -42,6 +46,7 @@ def lowercase_word(seed):
         seed = seed // 26
     return word
 
+## function to find collisions
 def thread_function(hashes):
     file2 = open("hash_collisions.txt", "a")
     try:
@@ -60,6 +65,7 @@ def thread_function(hashes):
         file2.close()
         exit()
 
+## check whether the threads are working
 def thread_checker(hashes):
     global text_result
     for word in hashes:
