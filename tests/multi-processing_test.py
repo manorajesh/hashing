@@ -15,8 +15,6 @@ def hashing(plaintext, length=32):
 
     for char in plaintext:
         random_length_num += ord(char) + random_length_num
-        random_length_num = ~ random_length_num + (random_length_num << 15)
-        random_length_num += random_length_num >> random_length_num
         random_length_num += ~ len(plaintext)
 
     while salt <= length:
@@ -78,9 +76,8 @@ def main():
     file2 = open("hash_collisions.txt", "w+")
 
     ## Generate hashes
-
     number = 0
-    hash_num = 20000
+    hash_num = 10000
     while number < hash_num:
         number += 1
         file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')

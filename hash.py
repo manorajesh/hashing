@@ -9,8 +9,6 @@ def hashing(plaintext, length=32):
 
     for char in plaintext:
         random_length_num += ord(char) + random_length_num
-        random_length_num = ~ random_length_num + (random_length_num << 15)
-        random_length_num += random_length_num >> random_length_num
         random_length_num += ~ len(plaintext)
 
     while salt <= length:
