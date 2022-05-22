@@ -18,6 +18,9 @@ def hashing(plaintext, length=32):
         random_length_num += 1
     return hash
 
-print("".join(hashing("i")))
-print("".join(hashing("ii")))
-print(jf.jaro_distance("".join(hashing("i")), "".join(hashing("ii"))))
+plaintext1 = "xgxg"
+plaintext2 = "xg"
+
+print("".join(hashing(plaintext1)))
+print("".join(hashing(plaintext2)))
+print(jf.jaro_distance("".join(hashing(plaintext1)), "".join(hashing(plaintext2))))

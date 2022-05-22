@@ -44,6 +44,13 @@ def lowercase_word(seed):
         seed = seed // 26
     return word
 
+def multiple_letters(seed):
+    word = ""
+    while seed > 0:
+        word += chr(seed % 26 + 97)
+        seed -= 26
+    return word
+
 ## function to find collisions
 def thread_function(hashes):
     file2 = open("hash_collisions.txt", "a")
@@ -71,16 +78,16 @@ def thread_checker(hashes):
 
 ## main
 def main():
-    file = open("hash.txt", "w+")
-    file1 = open("hash.txt", "w+")
-    file2 = open("hash_collisions.txt", "w+")
+    file = open("tests/hash.txt", "w+")
+    file1 = open("tests/hash.txt", "w+")
+    file2 = open("tests/hash_collisions.txt", "w+")
 
     ## Generate hashes
     number = 0
-    hash_num = 10000
+    hash_num = 1000
     while number < hash_num:
         number += 1
-        file.write("".join(hashing(lowercase_word(number))) + " " + lowercase_word(number) + '\n')
+        file.write("".join(hashing(lowercase_word(number))) + " " + multiple_letters(number) + '\n')
 
     file.seek(0)
     print(f"{len(file.readlines())} Hashes created {time.asctime()}")
