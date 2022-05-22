@@ -10,10 +10,10 @@ import sys
 @click.version_option(version='0.0.2')
 @click.help_option('--help', '-h')
 
-def hashing(plaintext, length=32, encoding=None):
+def hashing(plaintext, length, encoding):
     """Hash the FILE, or if no FILE is given, read standard input, and print the hash to standard output."""
 
-    if plaintext == sys.stdin:
+    if plaintext != "":
         plaintext = plaintext.read()
 
     seed = 0
