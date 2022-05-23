@@ -58,7 +58,8 @@ def thread_function(hashes):
         counter = 0
         for line in hashes:
             for word in hashes:
-                if jf.jaro_distance(line, word) > 0.9 and line != word:
+                print(line.split()[0], word.split()[0])
+                if jf.jaro_distance(line.split()[0], word.split()[0]) > 0.9 and line != word:
                     file2.write(line + word + '\n')
 
             if counter % 500 == 0:
@@ -83,8 +84,8 @@ def main():
     file2 = open("tests/hash_collisions.txt", "w+")
 
     ## Generate hashes
-    number = 0
-    hash_num = 1000
+    number = 9990
+    hash_num = 10000
     while number < hash_num:
         number += 1
         file.write("".join(hashing(lowercase_word(number))) + " " + multiple_letters(number) + '\n')
