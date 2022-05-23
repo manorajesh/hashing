@@ -23,10 +23,10 @@ def hashing(plaintext, length=32):
     while counter <= length:
         cardamom = (salt << pepper) | (cardamom >> pepper)
         hash.append(text[(cardamom*salt*pepper) % len(text)])
-        pepper += plaintext[counter % len(plaintext)] & pepper
+        pepper += plaintext[counter % len(plaintext)]
         salt += 1
         counter += 1
-    
+
     return hash 
 
 plaintext1 = "f"
@@ -35,15 +35,3 @@ plaintext2 = "ff"
 print("".join(hashing(plaintext1)))
 print("".join(hashing(plaintext2)))
 print(jf.jaro_distance("".join(hashing(plaintext1)), "".join(hashing(plaintext2))))
-
-counter = 0
-while True:
-    if hashing(plaintext1) == hashing(plaintext2):
-        print("Collision found")
-        print(plaintext1)
-        print(plaintext2)
-        print(counter)
-        break
-    else:
-        plaintext2 += "f"
-        counter += 1

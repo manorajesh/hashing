@@ -16,21 +16,31 @@ def hashing(plaintext, length, encoding):
     if plaintext != "":
         plaintext = plaintext.read()
 
-    seed = 0
+    cardamom = len(plaintext)
     hash = []
     salt = 0
-    random_length_num = 1
-    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
+    pepper = 0
+    counter = 0
+    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<?"
 
     for char in plaintext:
-        random_length_num += ord(char) + random_length_num
-        random_length_num += ~ len(plaintext)
+        pepper += ord(char) + pepper
+        pepper += ~ len(plaintext)
 
-    while salt <= length:
-        seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
-        hash.append(text[(seed**salt*random_length_num) % len(text)])
+    while counter <= length:
+        cardamom += pepper * cardamom & salt
+        pepper += 2
+        salt += ~ len(plaintext)
+        counter += 1
+    
+    counter = 0
+    plaintext = plaintext.encode()
+    while counter <= length:
+        cardamom = (salt << pepper) | (cardamom >> pepper)
+        hash.append(text[(cardamom*salt*pepper) % len(text)])
+        pepper += plaintext[counter % len(plaintext)]
         salt += 1
-        random_length_num += 1
+        counter += 1
 
     if encoding == None:
         click.echo("".join(hash))
