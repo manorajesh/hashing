@@ -21,7 +21,7 @@ def hashing(plaintext, length=32):
         seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
         hash.append(text[(seed**salt*random_length_num) % len(text)])
         salt += 1
-        random_length_num += 1
+        random_length_num += salt
     return hash
 
 ## checking if sha has collisions
@@ -58,7 +58,6 @@ def thread_function(hashes):
         counter = 0
         for line in hashes:
             for word in hashes:
-                print(line.split()[0], word.split()[0])
                 if jf.jaro_distance(line.split()[0], word.split()[0]) > 0.9 and line != word:
                     file2.write(line + word + '\n')
 
@@ -84,7 +83,7 @@ def main():
     file2 = open("tests/hash_collisions.txt", "w+")
 
     ## Generate hashes
-    number = 9990
+    number = 0
     hash_num = 10000
     while number < hash_num:
         number += 1
