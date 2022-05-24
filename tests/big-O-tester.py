@@ -32,7 +32,7 @@ def hashing(plaintext, length=32):
         salt += 1
         counter += 1
 
-    file.write(str(start_time - time.time()))
+    file.write(str(time.time() - start_time) + '\n')
     file.close()
 
 arguments = []
@@ -51,7 +51,7 @@ for i in range(1000//mp.cpu_count()):
             process.start()
         for process in processes:
             process.join()
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt or IndexError):
         for process in processes:
             process.terminate()
         break
