@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 import multiprocessing as mp
 import time
 
-from click import argument
-
 def hashing(plaintext, length=32):
     cardamom = len(plaintext)
     hash = []
@@ -31,16 +29,16 @@ def hashing(plaintext, length=32):
         pepper += plaintext[counter % len(plaintext)]
         salt += 1
         counter += 1
-    print("".join(hash))
+    #print("".join(hash))
 
 times = []
 arguments = []
 
-for i in range(100):
+for i in range(1000):
     arguments.append("xg"*(i+1))
 
 
-for i in range(100):
+for i in range(1000):
     try:
         start_time = time.time()
         p = mp.Process(target=hashing, args=(arguments[i],))
@@ -49,6 +47,10 @@ for i in range(100):
         times.append(time.time()-start_time)
     except KeyboardInterrupt:
         break
+file_write = " ".join(times)
+file = open("hash-times.txt", "w")
+file.write(file_write)
+file.close()
 
 plt.plot(times)
 plt.ylabel("Time")
