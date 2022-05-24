@@ -32,7 +32,7 @@ def hashing(plaintext, length=32):
         salt += 1
         counter += 1
 
-    file.write(start_time - time.time())
+    file.write(str(start_time - time.time()))
     file.close()
 
 arguments = []
