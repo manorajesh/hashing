@@ -3,6 +3,8 @@ import multiprocessing as mp
 import time
 
 def hashing(plaintext, length=32):
+    file = open("hash-times.txt", "w")
+    start_time = time.time()
     cardamom = len(plaintext)
     hash = []
     salt = 0
@@ -29,29 +31,20 @@ def hashing(plaintext, length=32):
         pepper += plaintext[counter % len(plaintext)]
         salt += 1
         counter += 1
-    #print("".join(hash))
 
-times = []
+    file.write(start_time - time.time())
+    file.close()
+
 arguments = []
 
 for i in range(1000):
     arguments.append("xg"*(i+1))
 
-
-for i in range(1000):
-    try:
-        start_time = time.time()
-        p = mp.Process(target=hashing, args=(arguments[i],))
-        p.start()
-        p.join()
-        times.append(time.time()-start_time)
-    except KeyboardInterrupt:
-        break
-file_write = " ".join(times)
-file = open("hash-times.txt", "w")
-file.write(file_write)
-file.close()
-
-plt.plot(times)
-plt.ylabel("Time")
-plt.show()
+for i in range(1000//mp.cpu_count()):
+    processes = []
+    for j in range(mp.cpu_count()):
+        processes.append(mp.Process(target=hashing, args=(arguments[i*mp.cpu_count()+j],)))
+    for process in processes:
+        process.start()
+    for process in processes:
+        process.join()
