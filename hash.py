@@ -10,27 +10,28 @@ def hashing(plaintext, length=32):
 
     for char in plaintext:
         pepper += ord(char) + pepper
-        pepper += ~ len(plaintext)
+        pepper -= ~ len(plaintext)
 
     while counter <= length:
         cardamom += pepper * cardamom & salt
         pepper += 2
-        salt += ~ len(plaintext)
+        salt -= ~ len(plaintext)
         counter += 1
+        pepper %= cardamom
     
     counter = 0
     plaintext = plaintext.encode()
     while counter <= length:
         cardamom = (salt << pepper) | (cardamom >> pepper)
-        hash.append(text[(cardamom*salt*pepper) % len(text)])
-        pepper += plaintext[counter % len(plaintext)]
+        hash.append(text[(cardamom+salt*pepper) % len(text)])
+        pepper = (salt+cardamom >> pepper) | (cardamom-pepper << pepper)
         salt += 1
         counter += 1
 
     return hash 
 
-plaintext1 = "f"
-plaintext2 = "ff"
+plaintext1 = "xg"
+plaintext2 = "xgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxg"
 
 print("".join(hashing(plaintext1)))
 print("".join(hashing(plaintext2)))

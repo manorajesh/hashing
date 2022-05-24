@@ -28,11 +28,11 @@ def hashing(plaintext, length=32):
     plaintext = plaintext.encode()
     while counter <= length:
         cardamom = (salt << pepper) | (cardamom >> pepper)
-        hash.append(text[(cardamom*salt*pepper) % len(text)])
-        pepper += plaintext[counter % len(plaintext)] & pepper
+        hash.append(text[(cardamom+salt*pepper) % len(text)])
+        pepper += plaintext[counter % len(plaintext)]
         salt += 1
         counter += 1
-    
+
     return hash 
 
 ## checking if sha has collisions
