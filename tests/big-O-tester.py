@@ -41,10 +41,15 @@ for i in range(1000):
     arguments.append("xg"*(i+1))
 
 for i in range(1000//mp.cpu_count()):
-    processes = []
-    for j in range(mp.cpu_count()):
-        processes.append(mp.Process(target=hashing, args=(arguments[i*mp.cpu_count()+j],)))
-    for process in processes:
-        process.start()
-    for process in processes:
-        process.join()
+    try:
+        processes = []
+        for j in range(mp.cpu_count()):
+            processes.append(mp.Process(target=hashing, args=(arguments[i*mp.cpu_count()+j],)))
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
+    except KeyboardInterrupt:
+        for process in processes:
+            process.terminate()
+        break
