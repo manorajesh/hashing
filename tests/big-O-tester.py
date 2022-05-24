@@ -3,7 +3,7 @@ import multiprocessing as mp
 import time
 
 def hashing(plaintext, length=32):
-    file = open("hash-times.txt", "w")
+    file = open("hash-times.txt", "a")
     start_time = time.time()
     cardamom = len(plaintext)
     hash = []
@@ -36,6 +36,8 @@ def hashing(plaintext, length=32):
     file.close()
 
 arguments = []
+file = open("hash-times.txt", "w")
+file.close()
 
 for i in range(1000):
     arguments.append("xg"*(i+1))
