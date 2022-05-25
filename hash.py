@@ -30,7 +30,7 @@ def hashing(plaintext, length=32):
     return hash 
 
 plaintext1 = "yy"
-plaintext2 = "mmmmmmmmmmmmmm"
+plaintext2 = "hello, world"
 
 print("".join(hashing(plaintext1)))
 print("".join(hashing(plaintext2)))
