@@ -1,7 +1,10 @@
+import matplotlib.pyplot as plt
 import multiprocessing as mp
 import time
 
 def hashingv2(plaintext, length=32):
+    file = open("hash-times.txt", "a")
+    start_time = time.time()
     cardamom = len(plaintext)
     hash = []
     salt = 0
@@ -29,7 +32,12 @@ def hashingv2(plaintext, length=32):
         salt += 1
         counter += 1
 
+    file.write(str(time.time() - start_time) + '\n')
+    file.close()
+
 def hashing(plaintext, length=32):
+    file = open("hash-times.txt", "a")
+    start_time = time.time()
     seed = 0
     hash = []
     salt = 0
@@ -45,23 +53,27 @@ def hashing(plaintext, length=32):
         hash.append(text[(seed**salt*cardamom) % len(text)])
         salt += 1
         cardamom += salt
+    
+    file.write(str(time.time() - start_time) + '\n')
+    file.close()
 
-times = []
 arguments = []
+file = open("hash-times.txt", "w")
+file.close()
 
 for i in range(1000):
     arguments.append("xg"*(i+1))
 
-for i in range(1000):
+for i in range(1000//mp.cpu_count()):
     try:
-        start_time = time.time()
-        p = mp.Process(target=hashing, args=(arguments[i],))
-        p.start()
-        p.join()
-        times.append(time.time()-start_time)
-    except KeyboardInterrupt:
+        processes = []
+        for j in range(mp.cpu_count()):
+            processes.append(mp.Process(target=hashing, args=(arguments[i*mp.cpu_count()+j],)))
+        for process in processes:
+            process.start()
+        for process in processes:
+            process.join()
+    except (KeyboardInterrupt or IndexError):
+        for process in processes:
+            process.terminate()
         break
-file_write = " ".join(times)
-file = open("hash-times.txt", "w")
-file.write(file_write)
-file.close()
