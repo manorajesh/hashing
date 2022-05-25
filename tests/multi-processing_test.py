@@ -78,9 +78,9 @@ def thread_checker(hashes):
 
 ## main
 def main():
-    file = open("tests/hash.txt", "w+")
-    file1 = open("tests/hash.txt", "w+")
-    file2 = open("tests/hash_collisions.txt", "w+")
+    file = open("hash.txt", "w+")
+    file1 = open("hash.txt", "w+")
+    file2 = open("hash_collisions.txt", "w+")
 
     ## Generate hashes
     number = 0
