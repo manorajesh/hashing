@@ -59,9 +59,12 @@ for i in range(1000):
         p.start()
         p.join()
         times.append(time.time()-start_time)
+        if i % 100 == 0:
+            print(i)
     except KeyboardInterrupt:
         break
-file_write = " ".join(times)
+
 file = open("hash-times.txt", "w")
-file.write(file_write)
+for i in times:
+    file.write(str(i) + '\n')
 file.close()
