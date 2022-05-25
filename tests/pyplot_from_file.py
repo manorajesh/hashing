@@ -29,12 +29,20 @@ def average_graphs(y_val1, y_val2):
         average_graph.append(fmean([y_val1[i], y_val2[i]]))
     return average_graph
 
+def line_of_best_fit_point_slope(x1, x2, y1, y2):
+    m = (y2-y1)/(x2-x1)
+    b = y1 - m*x1
+    print(f"y = {m}x + {b}")
+    return [m*i+b for i in range(x2)]
+
 ########### Data Preparation ###########
 
 # File reading
 file = open("tests/hash_times_50000.txt", "r")
 times = file.read().split()
 times = [float(i) for i in times]
+times = np.sort(times)
+file.close()
 
 # Smooth the data with a gaussian filter
 times_smoothed = gaussian_filter1d(times, sigma=25)
@@ -51,6 +59,9 @@ lineofbestfit2 = exponential(range(len(times_smoothed)), *pars)
 
 # Find line of best fit by averaging the two lobfs
 average_lobf = average_graphs(lineofbestfit1, lineofbestfit2)
+
+# Find line of best fit with point slope form
+lineofbestfit3 = line_of_best_fit_point_slope(0, len(times), times_smoothed[0], times_smoothed[-1])
 
 
 ########### Difference Graphs ###########
@@ -76,18 +87,18 @@ print(f"differnce_graph1: {fmean(difference_graph1)} \ndifference_graph2: {fmean
 print(min(abs(fmean(difference_graph1)), abs(fmean(difference_graph2)), abs(fmean(difference_graph3))))
 
 # Plot the data graphs
-plt.plot(times_smoothed, color="black")
-plt.plot(lineofbestfit1, color="green")
-plt.plot(lineofbestfit2, linestyle=':', linewidth=2, color='blue')
-plt.plot(average_lobf, color="red")
+fig, ax = plt.subplots(2)
+ax[0].plot(times_smoothed, color="black")
+ax[0].plot(lineofbestfit1, color="green")
+ax[0].plot(lineofbestfit2, linestyle=':', linewidth=2, color='blue')
+ax[0].plot(average_lobf, color="red")
+ax[0].plot(lineofbestfit3, color="orange")
 
 # Plot the difference graphs
-plt.text(500, difference_graph1[0]+0.005, "Difference Graphs", fontsize=8)
-plt.plot(difference_graph1, color="green")
-plt.plot(difference_graph2, color="blue")
-plt.plot(difference_graph3, color="red")
-plt.plot(horizontal_line(len(times_smoothed), 0), linestyle=':')
-plt.text(-100, times_smoothed[-1], equation)
+ax[1].plot(difference_graph1, color="green")
+ax[1].plot(difference_graph2, color="blue")
+ax[1].plot(difference_graph3, color="red")
+ax[1].plot(horizontal_line(len(times_smoothed), 0), linestyle=':')
 
 # Formatting
 ax = plt.gca()
