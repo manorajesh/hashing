@@ -10,18 +10,18 @@ def hashing(plaintext, length=32):
     seed = 0
     hash = []
     salt = 0
-    random_length_num = 1
+    cardamom = 1
     text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
 
     for char in plaintext:
-        random_length_num += ord(char) + random_length_num
-        random_length_num += ~ len(plaintext)
+        cardamom += ord(char) + cardamom
+        cardamom += ~ len(plaintext)
 
     while salt <= length:
-        seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
-        hash.append(text[(seed**salt*random_length_num) % len(text)])
+        seed += ord(plaintext[salt % len(plaintext)]) + salt * cardamom
+        hash.append(text[(seed**salt*cardamom) % len(text)])
         salt += 1
-        random_length_num += salt
+        cardamom += salt
     return hash
 
 ## checking if sha has collisions

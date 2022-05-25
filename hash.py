@@ -29,8 +29,8 @@ def hashing(plaintext, length=32):
         counter += 1
     return hash 
 
-plaintext1 = "xg"
-plaintext2 = "xgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxgxg"
+plaintext1 = "yy"
+plaintext2 = "mmmmmmmmmmmmmm"
 
 print("".join(hashing(plaintext1)))
 print("".join(hashing(plaintext2)))

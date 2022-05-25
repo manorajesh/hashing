@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import multiprocessing as mp
 import time
 
-def hashing(plaintext, length=32):
+def hashingv2(plaintext, length=32):
     file = open("hash-times.txt", "a")
     start_time = time.time()
     cardamom = len(plaintext)
@@ -32,6 +32,28 @@ def hashing(plaintext, length=32):
         salt += 1
         counter += 1
 
+    file.write(str(time.time() - start_time) + '\n')
+    file.close()
+
+def hashing(plaintext, length=32):
+    file = open("hash-times.txt", "a")
+    start_time = time.time()
+    seed = 0
+    hash = []
+    salt = 0
+    cardamom = 1
+    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
+
+    for char in plaintext:
+        cardamom += ord(char) + cardamom
+        cardamom += ~ len(plaintext)
+
+    while salt <= length:
+        seed += ord(plaintext[salt % len(plaintext)]) + salt * cardamom
+        hash.append(text[(seed**salt*cardamom) % len(text)])
+        salt += 1
+        cardamom += salt
+    
     file.write(str(time.time() - start_time) + '\n')
     file.close()
 
