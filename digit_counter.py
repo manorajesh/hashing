@@ -1,6 +1,3 @@
 count = 0
-n = 1448964885900253315056962248735064334280622163319
-while n > 0:
-    n //= 10
-    count += 1
-print(count)
+n = "486d74f35ed2a1d6d7b857f90d02c964d7bfef5f0bbf1f"
+print(len(n))

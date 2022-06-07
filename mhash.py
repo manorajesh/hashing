@@ -16,28 +16,27 @@ def hashing(plaintext, length, encoding):
     if plaintext != "":
         plaintext = plaintext.read()
 
-    seed = 0
-    hash = []
-    salt = 0
-    random_length_num = 1
-    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<>?"
+    plaintext = plaintext.encode('utf-8')
+    ciphertext = 0
+    H = [0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc]
 
-    for char in plaintext:
-        random_length_num += ord(char) + random_length_num
-        random_length_num += ~ len(plaintext)
+    sum = 0
+    for i, v in enumerate(plaintext):
+        sum += i ^ v
+        
+    for i in H:
+        sum = sum ^ i
+        sum = sum << length | sum >> length
+        sum = sum ^ i
+        sum = sum << length | sum >> length
 
-    while salt <= length:
-        seed += ord(plaintext[salt % len(plaintext)]) + salt * random_length_num
-        hash.append(text[(seed**salt*random_length_num) % len(text)])
-        salt += 1
-        random_length_num += 1
-
-    if encoding == None:
-        click.echo("".join(hash))
-    elif encoding == "base64":
-        click.echo(base64.b64encode("".join(hash).encode()).decode())
-    elif encoding == "hex":
-        click.echo("".join(hash).encode().hex())
+    plaintext_length = len(plaintext)
+    for i in range(length):
+        ciphertext = ciphertext ^ plaintext[i % plaintext_length]
+        ciphertext = ciphertext >> length | ciphertext << length
+        ciphertext = ciphertext ^ sum >> plaintext[i % plaintext_length]
+    
+    click.echo(hex(ciphertext%10000000000000000000000000000000000000000000000000000001)[2:])
 
 if __name__ == '__main__':
     hashing()
