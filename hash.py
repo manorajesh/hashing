@@ -1,37 +1,32 @@
 import jellyfish as jf
 
 def hashing(plaintext, length=32):
-    cardamom = len(plaintext)
-    hash = []
-    salt = 0
-    pepper = 0
-    counter = 0
-    text = "abcdefghjiklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ)(*&%$#@!<?"
-
-    for char in plaintext:
-        pepper += ord(char) + pepper
-        pepper -= ~ len(plaintext)
-
-    while counter <= length:
-        cardamom += pepper * cardamom & salt
-        pepper += 2
-        salt -= ~ len(plaintext)
-        counter += 1
-        pepper %= cardamom
+    plaintext = plaintext.encode('utf-8')
+    ciphertext = 0
+    H = [0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc]
     
-    counter = 0
-    plaintext = plaintext.encode()
-    while counter <= length:
-        cardamom = (salt << pepper) | (cardamom >> pepper)
-        hash.append(text[(cardamom*salt*pepper) % len(text)])
-        pepper += plaintext[counter % len(plaintext)]
-        salt += 1
-        counter += 1
-    return hash 
+    sum = 0
+    for i, v in enumerate(plaintext):
+        sum += sum ^ v | sum >> 5
+        sum = sum ^ 0x7137449123ef65cd
 
-plaintext1 = "yy"
-plaintext2 = "hello, world"
+    for i in H:
+        sum = sum ^ i
+        sum = sum << length | sum >> length
+        sum = sum ^ i
+        sum = sum << length | sum >> length
 
-print("".join(hashing(plaintext1)))
-print("".join(hashing(plaintext2)))
-print(jf.jaro_distance("".join(hashing(plaintext1)), "".join(hashing(plaintext2))))
+    plaintext_length = len(plaintext)
+    for i in range(length):
+        ciphertext = ciphertext ^ plaintext[i % plaintext_length]
+        ciphertext = ciphertext >> length | ciphertext << length
+        ciphertext = ciphertext ^ sum
+    
+    return hex(ciphertext%10000000000000000000000000000000000000000000000000000001)[2:]
+
+plaintext1 = "yyy111"
+plaintext2 = "yyy"
+
+print(hashing(plaintext1))
+print(hashing(plaintext2))
+print(jf.jaro_distance(hashing(plaintext1), hashing(plaintext2)))
