@@ -6,7 +6,7 @@ import multiprocessing as mp
 import hashlib
 
 ## hashing function
-def hashing(plaintext, length=55):
+def hashing(plaintext, length=50):
     plaintext = plaintext.encode('utf-8')
     ciphertext = 0
     H = [0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc]
@@ -25,7 +25,7 @@ def hashing(plaintext, length=55):
         ciphertext = ciphertext >> length | ciphertext << length
         ciphertext = ciphertext ^ sum >> plaintext[i % plaintext_length]
     
-    return hex(ciphertext % 100000000000000000000000000000010000000000000000000000000001)[2:46]
+    return hex(ciphertext % 1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821)[2:]
 
 ## checking if sha has collisions
 def sha(plaintext):
